@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: flaskhello
+  template:
+    metadata:
+      labels:
+        app: flaskhello
+    spec:
+      containers:
+        - name: main
+          image: sdputurn/ci-cd-pipeline
+          ports:
+            - containerPort: 5000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: flaskhello
+  labels:
+    app: flaskhello
+spec:
+  selector:
+    app: flaskhello
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flaskhello-ingress
+  namespace: default
+spec:
+  rules:
+  - host: flaskapp.192.168.1.10.xip.io
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: flaskhello
+              port:
+                number: 80
