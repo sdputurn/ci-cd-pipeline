@@ -1,4 +1,5 @@
 from flask import Flask
+import datetime as time
  
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
@@ -10,7 +11,8 @@ app = Flask(__name__)
 @app.route('/')
 # ‘/’ URL is bound with hello_world() function.
 def hello_world():
-    return 'Hello World'
+    c_time = time.now()
+    return 'Hello Sandeep version 2' + c_time.strftime("%S")
  
 # main driver function
 if __name__ == '__main__':
